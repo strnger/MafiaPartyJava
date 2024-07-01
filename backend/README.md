@@ -1,4 +1,4 @@
-I am working on a Mafia party game project, please ask for any questions such as folder structure or to see other files as necessary. I will ask my question in the next message:
+I am working on a Mafia party game project, please go to this github link to see all of the files and base your answer on it: https://github.com/strnger/MafiaPartyJava . Here are the details of the project, I will ask my question in the next message:
 
 
 Project Overview:

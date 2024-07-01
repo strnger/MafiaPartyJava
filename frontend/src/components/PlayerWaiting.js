@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -11,11 +11,14 @@ const PlayerWaiting = () => {
   const roomCode = new URLSearchParams(location.search).get('roomCode');
   const playerName = new URLSearchParams(location.search).get('playerName');
 
+  const stompClientRef = useRef(null);
+
   useEffect(() => {
     setName(playerName);
 
     const socket = new SockJS('http://localhost:8080/ws');
     const stompClient = Stomp.over(socket);
+    stompClientRef.current = stompClient;
 
     stompClient.connect({}, () => {
       console.log('Connected to WebSocket server');
@@ -29,19 +32,19 @@ const PlayerWaiting = () => {
     });
 
     return () => {
-      stompClient.disconnect(() => {
-        console.log('Disconnected from WebSocket server');
-        setIsConnected(false);
-      });
+      if (stompClientRef.current) {
+        stompClientRef.current.disconnect(() => {
+          console.log('Disconnected from WebSocket server');
+          setIsConnected(false);
+        });
+      }
     };
   }, [navigate, roomCode, playerName]);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
-    if (isConnected) {
-      const socket = new SockJS('http://localhost:8080/ws');
-      const stompClient = Stomp.over(socket);
-      stompClient.send(`/app/updatePlayerName/${roomCode}`, {}, JSON.stringify({ playerName: e.target.value }));
+    if (isConnected && stompClientRef.current) {
+      stompClientRef.current.send(`/app/updatePlayerName/${roomCode}`, {}, JSON.stringify({ playerName: e.target.value }));
     } else {
       console.error('WebSocket is not connected');
     }
