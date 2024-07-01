@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, List, ListItem, ListItemText } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
 const LobbyPage = () => {
@@ -19,7 +20,7 @@ const LobbyPage = () => {
       });
 
     // WebSocket connection to get real-time updates
-    const socket = new WebSocket('ws://localhost:8080/ws');
+    const socket = new SockJS('http://localhost:8080/ws');
     const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {
@@ -27,6 +28,8 @@ const LobbyPage = () => {
         const newPlayer = JSON.parse(message.body);
         setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
       });
+    }, (error) => {
+      console.error('STOMP error:', error);
     });
 
     return () => {
