@@ -8,6 +8,7 @@ const JoinPage = () => {
   const [roomCode, setRoomCode] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const baseURL = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -18,7 +19,7 @@ const JoinPage = () => {
   }, [location]);
 
   const joinGame = () => {
-    axios.post(`http://localhost:8080/api/lobby/join?roomCode=${roomCode}&playerName=${name}`)
+    axios.post(`${baseURL}/api/lobby/join?roomCode=${roomCode}&playerName=${name}`)
       .then(response => {
         const { playerId } = response.data; // Assuming the backend returns the playerId
         // Redirect to the PlayerWaiting page after joining

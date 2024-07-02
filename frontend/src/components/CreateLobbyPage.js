@@ -4,9 +4,10 @@ import axios from 'axios';
 
 const CreateLobbyPage = () => {
   const [roomCode, setRoomCode] = useState('');
+  const baseURL = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
-    axios.post('http://localhost:8080/api/lobby/create')
+    axios.post(`${baseURL}/api/lobby/create`)
       .then(response => {
         setRoomCode(response.data);
       })

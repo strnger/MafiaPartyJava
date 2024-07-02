@@ -10,10 +10,11 @@ const LobbyPage = () => {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
   const baseURL = window.location.origin; // Get the base URL
+  const baseURL8080 = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
     // Fetch initial data for the room code
-    axios.get(`http://localhost:8080/api/lobby/${roomCode}/players`)
+    axios.get(`${baseURL}/api/lobby/${roomCode}/players`)
       .then(response => {
         setPlayers(response.data);
       })
@@ -22,7 +23,7 @@ const LobbyPage = () => {
       });
 
     // WebSocket connection to get real-time updates
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS(`${baseURL8080}/ws`);
     const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {
@@ -40,7 +41,7 @@ const LobbyPage = () => {
   }, [roomCode]);
 
   const startGame = () => {
-    axios.post(`http://localhost:8080/api/lobby/start?roomCode=${roomCode}`)
+    axios.post(`${baseURL}/api/lobby/start?roomCode=${roomCode}`)
       .then(() => {
         // Handle game start
       })

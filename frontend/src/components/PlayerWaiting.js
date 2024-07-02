@@ -11,13 +11,14 @@ const PlayerWaiting = () => {
   const roomCode = new URLSearchParams(location.search).get('roomCode');
   const playerName = new URLSearchParams(location.search).get('playerName');
   const playerId = new URLSearchParams(location.search).get('playerId'); // Get playerId from URL
+  const baseURL = window.location.origin.replace(':3000', ':8080');
 
   const stompClientRef = useRef(null);
 
   useEffect(() => {
     setName(playerName);
 
-    const socket = new SockJS('http://localhost:8080/ws');
+    const socket = new SockJS(`${baseURL}/ws`);
     const stompClient = Stomp.over(socket);
     stompClientRef.current = stompClient;
 

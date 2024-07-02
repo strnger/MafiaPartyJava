@@ -3,7 +3,8 @@ import { Client } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
 
 export const socket = new Client({
-  brokerURL: 'ws://localhost:8080/ws', // Ensure this is correct
+  const baseURL = window.location.origin.replace(':3000', ':8080').replace('http', 'ws');
+  brokerURL: `${baseURL}/ws`, // Ensure this is correct
   reconnectDelay: 5000, // Attempt to reconnect every 5 seconds
 });
 
