@@ -10,6 +10,7 @@ const PlayerWaiting = () => {
   const location = useLocation();
   const roomCode = new URLSearchParams(location.search).get('roomCode');
   const playerName = new URLSearchParams(location.search).get('playerName');
+  const playerId = new URLSearchParams(location.search).get('playerId'); // Get playerId from URL
 
   const stompClientRef = useRef(null);
 
@@ -24,7 +25,7 @@ const PlayerWaiting = () => {
       console.log('Connected to WebSocket server');
       setIsConnected(true);
       stompClient.subscribe(`/topic/startGame/${roomCode}`, () => {
-        navigate('/PlayerPage');
+        navigate(`/PlayerPage?playerId=${playerId}`); // Pass playerId when navigating
       });
     }, (error) => {
       console.error('STOMP error:', error);
@@ -39,16 +40,22 @@ const PlayerWaiting = () => {
         });
       }
     };
-  }, [navigate, roomCode, playerName]);
+  }, [navigate, roomCode, playerName, playerId]);
 
   const handleNameChange = (e) => {
-    setName(e.target.value);
+    const newName = e.target.value;
+    setName(newName);
     if (isConnected && stompClientRef.current) {
-      stompClientRef.current.send(`/app/updatePlayerName/${roomCode}`, {}, JSON.stringify({ playerName: e.target.value }));
+      const playerUpdate = {
+        id: playerId, // Ensure playerId is included in the message
+        name: newName
+      };
+      stompClientRef.current.send(`/app/updatePlayerName/${roomCode}`, {}, JSON.stringify(playerUpdate));
     } else {
       console.error('WebSocket is not connected');
     }
   };
+
 
   return (
     <div>

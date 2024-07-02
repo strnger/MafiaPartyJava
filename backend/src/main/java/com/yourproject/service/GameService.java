@@ -25,11 +25,12 @@ public class GameService {
         return roomCode;
     }
 
-    public void joinLobby(String roomCode, Player player) {
+    public String joinLobby(String roomCode, Player player) {
         Game game = games.get(roomCode);
         if (game != null && player != null) {
             game.addPlayer(player);
-            notifyLobby(roomCode, player);
+            notifyLobby(player.getName());
+            return player.getId();
         } else {
             throw new IllegalArgumentException("Invalid room code or player");
         }
@@ -61,7 +62,20 @@ public class GameService {
         return UUID.randomUUID().toString().substring(0, 6).toUpperCase();
     }
 
-    private void notifyLobby(String roomCode, Player player) {
-        messagingTemplate.convertAndSend("/topic/lobby/" + roomCode, player);
+    public void updatePlayerName(String roomCode, Player player) {
+        Game game = games.get(roomCode);
+        if (game != null) {
+            game.updatePlayerName(player);
+            notifyLobby(roomCode); // Notify the lobby about the updated player list
+        } else {
+            throw new IllegalArgumentException("Invalid room code");
+        }
+    }
+
+    private void notifyLobby(String roomCode) {
+        Game game = games.get(roomCode);
+        if (game != null) {
+            messagingTemplate.convertAndSend("/topic/lobby/" + roomCode, game.getPlayers());
+        }
     }
 }

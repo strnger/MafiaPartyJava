@@ -1,6 +1,8 @@
 package com.yourproject.model;
 
 import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Player {
 
@@ -10,10 +12,12 @@ public class Player {
     private boolean isAlive;
     private String lastWill;
 
-    public Player(String id, String name) {
+    @JsonCreator
+    public Player(@JsonProperty("id") String id, @JsonProperty("name") String name) {
         this.id = id;
         this.name = name;
     }
+
     public Player(String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;

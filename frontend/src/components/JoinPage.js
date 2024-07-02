@@ -10,9 +10,10 @@ const JoinPage = () => {
 
   const joinGame = () => {
     axios.post(`http://localhost:8080/api/lobby/join?roomCode=${roomCode}&playerName=${name}`)
-      .then(() => {
+      .then(response => {
+        const { playerId } = response.data; // Assuming the backend returns the playerId
         // Redirect to the PlayerWaiting page after joining
-        navigate(`/PlayerWaiting?roomCode=${roomCode}&playerName=${name}`);
+        navigate(`/PlayerWaiting?roomCode=${roomCode}&playerName=${name}&playerId=${playerId}`);
       })
       .catch(error => {
         console.error('There was an error joining the game!', error);

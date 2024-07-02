@@ -36,6 +36,16 @@ public class Game {
         // Random role assignment logic
     }
 
+    public void updatePlayerName(Player updatedPlayer) {
+        for (Player player : players) {
+            if (player.getId().equals(updatedPlayer.getId())) {
+                player.setName(updatedPlayer.getName());
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Player not found: " + updatedPlayer.getId());
+    }
+
     public List<Player> getPlayers() {
         return players;
     }

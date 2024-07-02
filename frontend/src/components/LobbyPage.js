@@ -25,8 +25,8 @@ const LobbyPage = () => {
 
     stompClient.connect({}, () => {
       stompClient.subscribe(`/topic/lobby/${roomCode}`, (message) => {
-        const newPlayer = JSON.parse(message.body);
-        setPlayers((prevPlayers) => [...prevPlayers, newPlayer]);
+        const updatedPlayers = JSON.parse(message.body);
+        setPlayers(updatedPlayers); // Set the entire updated player list
       });
     }, (error) => {
       console.error('STOMP error:', error);
@@ -53,7 +53,7 @@ const LobbyPage = () => {
       <p>Room Code: {roomCode}</p>
       <List>
         {players.map(player => (
-          <ListItem key={player.name}>
+          <ListItem key={player.id}>
             <ListItemText primary={player.name} />
           </ListItem>
         ))}
