@@ -21,8 +21,7 @@ const JoinPage = () => {
   const joinGame = () => {
     axios.post(`${baseURL}/api/lobby/join?roomCode=${roomCode}&playerName=${name}`)
       .then(response => {
-        const { playerId } = response.data; // Assuming the backend returns the playerId
-        // Redirect to the PlayerWaiting page after joining
+        const { playerId } = response.data;
         navigate(`/PlayerWaiting?roomCode=${roomCode}&playerName=${name}&playerId=${playerId}`);
       })
       .catch(error => {

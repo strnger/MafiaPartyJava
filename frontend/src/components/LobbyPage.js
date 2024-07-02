@@ -5,12 +5,14 @@ import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import QRCode from 'qrcode.react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const LobbyPage = () => {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
   const baseURL = window.location.origin; // Get the base URL
   const baseURL8080 = window.location.origin.replace(':3000', ':8080');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch initial data for the room code
@@ -41,9 +43,9 @@ const LobbyPage = () => {
   }, [roomCode]);
 
   const startGame = () => {
-    axios.post(`${baseURL}/api/lobby/start?roomCode=${roomCode}`)
+    axios.post(`${baseURL8080}/api/lobby/start?roomCode=${roomCode}`)
       .then(() => {
-        // Handle game start
+        navigate(`/GamePage?roomCode=${roomCode}`);
       })
       .catch(error => {
         console.error('There was an error starting the game!', error);

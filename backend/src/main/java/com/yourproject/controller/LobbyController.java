@@ -10,7 +10,6 @@ import com.yourproject.service.GameService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/lobby")
@@ -34,9 +33,9 @@ public class LobbyController {
 
 
     @PostMapping("/start")
-    public ResponseEntity<Void> startGame(@RequestParam String roomCode) {
+    public ResponseEntity<String> startGame(@RequestParam String roomCode) {
         gameService.startGame(roomCode);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Game started successfully");
     }
 
     @GetMapping("/{roomCode}/players")
