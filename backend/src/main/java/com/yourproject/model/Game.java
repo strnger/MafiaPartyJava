@@ -15,6 +15,11 @@ public class Game {
     }
 
     public void addPlayer(Player player) {
+        for (Player p : players) {
+            if (p.getId().equals(player.getId())) {
+                throw new IllegalArgumentException("Non-unique player ID: " + player.getId());
+            }
+        }
         players.add(player);
     }
 
@@ -34,6 +39,4 @@ public class Game {
     public List<Player> getPlayers() {
         return players;
     }
-
-    // Getters and setters for roomCode, phase, and winner if needed
 }

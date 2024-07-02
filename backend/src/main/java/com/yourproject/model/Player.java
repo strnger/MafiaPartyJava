@@ -1,14 +1,22 @@
 package com.yourproject.model;
 
+import java.util.UUID;
+
 public class Player {
+
+    private String id;
     private String name;
     private String role;
     private boolean isAlive;
     private String lastWill;
 
-    public Player(String name) {
+    public Player(String id, String name) {
+        this.id = id;
         this.name = name;
-        this.isAlive = true;
+    }
+    public Player(String name) {
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
     }
 
     // Getters and setters
@@ -20,5 +28,11 @@ public class Player {
         this.name = name;
     }
 
-    // Getters and setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

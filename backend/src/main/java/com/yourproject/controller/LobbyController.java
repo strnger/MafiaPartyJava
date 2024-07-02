@@ -8,6 +8,8 @@ import com.yourproject.model.Player;
 import com.yourproject.service.GameService;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/lobby")
@@ -23,7 +25,7 @@ public class LobbyController {
 
     @PostMapping("/join")
     public ResponseEntity<Void> joinLobby(@RequestParam String roomCode, @RequestParam String playerName) {
-        gameService.joinLobby(roomCode, playerName);
+        gameService.joinLobby(roomCode, new Player(playerName));
         return ResponseEntity.ok().build();
     }
 

@@ -25,15 +25,13 @@ public class GameService {
         return roomCode;
     }
 
-    public void joinLobby(String roomCode, String playerName) {
+    public void joinLobby(String roomCode, Player player) {
         Game game = games.get(roomCode);
-        if (game != null) {
-            Player player = new Player(playerName);
+        if (game != null && player != null) {
             game.addPlayer(player);
-            // Notify the lobby about the new player
             notifyLobby(roomCode, player);
         } else {
-            throw new IllegalArgumentException("Invalid room code");
+            throw new IllegalArgumentException("Invalid room code or player");
         }
     }
 
