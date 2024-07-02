@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const JoinPage = () => {
   const [name, setName] = useState('');
   const [roomCode, setRoomCode] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const roomCodeParam = params.get('roomCode');
+    if (roomCodeParam) {
+      setRoomCode(roomCodeParam);
+    }
+  }, [location]);
 
   const joinGame = () => {
     axios.post(`http://localhost:8080/api/lobby/join?roomCode=${roomCode}&playerName=${name}`)

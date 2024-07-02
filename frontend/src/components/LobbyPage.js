@@ -4,10 +4,12 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import QRCode from 'qrcode.react';
 
 const LobbyPage = () => {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
+  const baseURL = window.location.origin; // Get the base URL
 
   useEffect(() => {
     // Fetch initial data for the room code
@@ -47,10 +49,13 @@ const LobbyPage = () => {
       });
   };
 
+  const joinURL = `${baseURL}/join?roomCode=${roomCode}`; // Construct the join URL
+
   return (
     <div>
       <h1>Lobby</h1>
       <p>Room Code: {roomCode}</p>
+      <QRCode value={joinURL} /> {/* Update QRCode component */}
       <List>
         {players.map(player => (
           <ListItem key={player.id}>
