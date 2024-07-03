@@ -42,15 +42,16 @@ const LobbyPage = () => {
     };
   }, [roomCode]);
 
-  const startGame = () => {
-    axios.post(`${baseURL8080}/api/lobby/start?roomCode=${roomCode}`)
-      .then(() => {
-        navigate(`/GamePage?roomCode=${roomCode}`);
-      })
-      .catch(error => {
-        console.error('There was an error starting the game!', error);
-      });
-  };
+const startGame = () => {
+  axios.post(`${baseURL8080}/api/lobby/start?roomCode=${roomCode}`)
+    .then(() => {
+      navigate(`/game/${roomCode}`);
+    })
+    .catch(error => {
+      console.error('There was an error starting the game!', error);
+    });
+};
+
 
   const joinURL = `${baseURL}/join?roomCode=${roomCode}`; // Construct the join URL
 

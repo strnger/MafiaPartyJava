@@ -1,5 +1,7 @@
 package com.yourproject.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,17 @@ public class Game {
     private String roomCode;
     private List<Player> players = new ArrayList<>();
     private String phase;
-    private String winner;
+    private List<Player> winners = new ArrayList<>();
+
+    public Game(@JsonProperty("roomCode") String roomCode,
+                @JsonProperty("players") List<Player> players,
+                @JsonProperty("phase") String phase,
+                @JsonProperty("winners") List<Player> winners) {
+        this.roomCode = roomCode;
+        this.players = players;
+        this.phase = phase;
+        this.winners = winners;
+    }
 
     public Game(String roomCode) {
         this.roomCode = roomCode;
@@ -19,6 +31,9 @@ public class Game {
             if (p.getId().equals(player.getId())) {
                 throw new IllegalArgumentException("Non-unique player ID: " + player.getId());
             }
+            if (p.getName().equals(player.getName())) {
+                throw new IllegalArgumentException("Non-unique player name: " + player.getName());
+            }
         }
         players.add(player);
     }
@@ -29,7 +44,12 @@ public class Game {
     }
 
     public void advancePhase() {
-        // Logic to advance phase
+        // Logic to advance phase, for example:
+        if ("Day".equals(this.phase)) {
+            this.phase = "Night";
+        } else if ("Night".equals(this.phase)) {
+            this.phase = "Day";
+        }
     }
 
     private void assignRoles() {
@@ -48,5 +68,21 @@ public class Game {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public String getPhase() {
+        return phase;
+    }
+
+    public String getRoomCode() {
+        return roomCode;
+    }
+
+    public List<Player> getWinners() {
+        return winners;
+    }
+
+    public void setWinners(List<Player> winners) {
+        this.winners = winners;
     }
 }

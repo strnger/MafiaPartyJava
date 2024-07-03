@@ -13,14 +13,23 @@ public class Player {
     private String lastWill;
 
     @JsonCreator
-    public Player(@JsonProperty("id") String id, @JsonProperty("name") String name) {
+    public Player(@JsonProperty("id") String id,
+                  @JsonProperty("name") String name,
+                  @JsonProperty("role") String role,
+                  @JsonProperty("isAlive") boolean isAlive,
+                  @JsonProperty("lastWill") String lastWill) {
         this.id = id;
         this.name = name;
+        this.role = role;
+        this.isAlive = isAlive;
+        this.lastWill = lastWill;
     }
 
     public Player(String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
+        this.isAlive = true;
+        this.lastWill = "Type last will here";
     }
 
     // Getters and setters

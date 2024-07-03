@@ -5,30 +5,85 @@ import { useParams } from 'react-router-dom';
 
 const GamePage = () => {
   const { roomCode } = useParams();
-  const [gameState, setGameState] = useState({});
+  const [gameState, setGameState] = useState({
+    phase: '',
+    players: [],
+    roomCode: '',
+    winners: []
+  });
+  const [timer, setTimer] = useState(45);
+  const [isNightPhase, setIsNightPhase] = useState(false);
+  const baseURL = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
-    // Fetch game state
-  }, []);
+    if (roomCode) {
+      // Fetch game state
+      axios.get(`${baseURL}/api/game?roomCode=${roomCode}`)
+        .then(response => {
+          if (response.data) {
+            console.log('Fetched game state:', response.data); // Debug log
+            setGameState(response.data);
+            setIsNightPhase(response.data.phase === 'Night');
+            setTimer(45);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching game state:', error);
+        });
+    }
+  }, [roomCode]);
+
+  useEffect(() => {
+    let timerId;
+    if (isNightPhase) {
+      timerId = setInterval(() => {
+        setTimer(prevTimer => {
+          if (prevTimer <= 1) {
+            clearInterval(timerId);
+            advancePhase();
+            return 45;
+          }
+          return prevTimer - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timerId);
+  }, [isNightPhase]);
 
   const advancePhase = () => {
-    axios.post('/api/game/advance', { roomCode })
-      .then(() => {
-        // Handle phase advancement
+    axios.post(`${baseURL}/api/game/advancePhase?roomCode=${roomCode}`)
+      .then(response => {
+        if (response.data) {
+          console.log('Advanced phase:', response.data); // Debug log
+          setGameState(response.data);
+          setIsNightPhase(response.data.phase === 'Night');
+          setTimer(45);
+        }
+      })
+      .catch(error => {
+        console.error('Error advancing phase:', error);
       });
   };
 
   return (
     <div>
-      <h1>Game</h1>
+      <h1>{gameState.phase ? gameState.phase : 'Game'}</h1>
+      {isNightPhase && <div>Night phase ends in: {timer} seconds</div>}
       <List>
         {gameState.players && gameState.players.map(player => (
-          <ListItem key={player.name}>
+          <ListItem key={player.id}> {/* Use player.id as key */}
             <ListItemText primary={player.name} secondary={player.isAlive ? 'Alive' : `Dead (Role: ${player.role}, Last Will: ${player.lastWill})`} />
           </ListItem>
         ))}
       </List>
-      <Button onClick={advancePhase} variant="contained" color="primary">Advance Phase</Button>
+      <Button
+        onClick={advancePhase}
+        variant="contained"
+        color="primary"
+        disabled={isNightPhase}
+      >
+        Advance Phase
+      </Button>
     </div>
   );
 };

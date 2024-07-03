@@ -1,5 +1,6 @@
 package com.yourproject.controller;
 
+import com.yourproject.model.Game;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,18 +25,16 @@ public class LobbyController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String, String>> joinLobby(@RequestParam String roomCode, @RequestParam String playerName) {
-        String playerId = gameService.joinLobby(roomCode, new Player(playerName));
-        Map<String, String> response = new HashMap<>();
-        response.put("playerId", playerId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Player> joinLobby(@RequestParam String roomCode, @RequestParam String playerName) {
+        Player player = gameService.joinLobby(roomCode, new Player(playerName));
+        return ResponseEntity.ok(player);
     }
 
 
     @PostMapping("/start")
-    public ResponseEntity<String> startGame(@RequestParam String roomCode) {
-        gameService.startGame(roomCode);
-        return ResponseEntity.ok().body("Game started successfully");
+    public ResponseEntity<Game> startGame(@RequestParam String roomCode) {
+        Game game = gameService.startGame(roomCode);
+        return ResponseEntity.ok(game);
     }
 
     @GetMapping("/{roomCode}/players")
