@@ -48,4 +48,30 @@ public class Player {
     public void setId(String id) {
         this.id = id;
     }
+
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public String getLastWill() {
+        return lastWill;
+    }
+
+    public void setLastWill(String lastWill) {
+        this.lastWill = lastWill;
+    }
+
 }
