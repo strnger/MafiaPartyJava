@@ -27,7 +27,7 @@ const PlayerPage = () => {
       .then(response => {
         const playerData = response.data;
         setRole(playerData.role);
-        setLastWill(playerData.lastWill);
+        setLastWill(playerData.lastWill); // Assuming lastWill is already a plain string
         setHasLife(playerData.hasLife);
       })
       .catch(error => {

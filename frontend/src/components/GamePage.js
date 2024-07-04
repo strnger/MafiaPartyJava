@@ -86,13 +86,33 @@ const GamePage = () => {
       });
   };
 
+  const parseWill = (lastWill) => {
+    if (!lastWill) {
+      return 'No will';
+    }
+
+    try {
+      const parsedWill = JSON.parse(lastWill);
+      return parsedWill.lastWill || 'No will';
+    } catch (error) {
+      return 'No will';
+    }
+  };
+
   return (
     <Container style={{ padding: '20px' }}>
       <h1>{gameState.phase}</h1>
       <List>
         {gameState.players && gameState.players.map(player => (
           <ListItem key={player.id} style={{ display: 'flex', alignItems: 'center' }}>
-            <ListItemText primary={player.name} secondary={player.hasLife ? 'Alive' : `Killed by ${player.killer.roleOfKiller} - Role: ${player.role.title} - Last Will: ${JSON.parse(player.lastWill).lastWill} `} />
+            <ListItemText
+              primary={player.name}
+              secondary={
+                player.hasLife
+                  ? 'Alive'
+                  : `Killed by ${player.killer.roleOfKiller} - Role: ${player.role.title} - Last Will: ${parseWill(player.lastWill)}`
+              }
+            />
             {player.hasLife && (
               <Button
                 onClick={() => executePlayer(player.id)}
