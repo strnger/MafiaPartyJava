@@ -77,17 +77,16 @@ const GamePage = () => {
     axios.post(`${baseURL}/api/game/advancePhase?roomCode=${roomCode}`)
       .then(response => {
         if (response.data) {
-          console.log('Advanced phase:', response.data); // Debug log
+          console.log('Advanced phase:', response.data);
           setGameState(response.data);
           setIsNightPhase(response.data.phase === 'Night');
           setTimer(TIMER_DURATION);
 
           if (response.data.phase === 'Day') {
-            // Fetch fresh game state when Day phase begins
             axios.get(`${baseURL}/api/game?roomCode=${roomCode}`)
               .then(response => {
                 if (response.data) {
-                  console.log('Fetched fresh game state for Day phase:', response.data); // Debug log
+                  console.log('Fetched fresh game state for Day phase:', response.data);
                   setGameState(response.data);
                 }
               })
@@ -105,11 +104,10 @@ const GamePage = () => {
   const executePlayer = (playerId) => {
     axios.post(`${baseURL}/api/game/${roomCode}/executePlayer/${playerId}`)
       .then(() => {
-        // Refresh game state after executing player
         axios.get(`${baseURL}/api/game?roomCode=${roomCode}`)
           .then(response => {
             if (response.data) {
-              console.log('Fetched fresh game state after executing player:', response.data); // Debug log
+              console.log('Fetched fresh game state after executing player:', response.data);
               setGameState(response.data);
             }
           })
@@ -128,7 +126,7 @@ const GamePage = () => {
       {isNightPhase && <div>Night phase ends in: {timer} seconds</div>}
       <List>
         {gameState.players && gameState.players.map(player => (
-          <ListItem key={player.id} style={{ display: 'flex', alignItems: 'center' }}> {/* Use player.id as key */}
+          <ListItem key={player.id} style={{ display: 'flex', alignItems: 'center' }}>
             <ListItemText primary={player.name} secondary={player.hasLife ? 'Alive' : `Killed by ${player.killer.roleOfKiller} - Role: ${player.role.title} - Last Will: ${JSON.parse(player.lastWill).lastWill} `} />
             {player.hasLife && (
               <Button

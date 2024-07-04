@@ -17,7 +17,6 @@ const PlayerPage = () => {
   useEffect(() => {
     console.log('PlayerName from URL:', playerName);
 
-    // Fetch player's initial state
     axios.get(`${baseURL}/api/player/${roomCode}/${playerId}`)
       .then(response => {
         const playerData = response.data;
@@ -25,11 +24,10 @@ const PlayerPage = () => {
         setLastWill(playerData.lastWill);
         setHasLife(playerData.hasLife);
 
-        // Save "Will" as the last will when the page loads for the first time
         axios.post(`${baseURL}/api/player/${roomCode}/${playerId}/lastWill`, { lastWill: "Will" })
           .then(() => {
             console.log('Initial last will saved successfully');
-            setLastWill("Will"); // Update the state to reflect the saved will
+            setLastWill("Will");
           })
           .catch(error => {
             console.error('Error saving initial last will:', error);
@@ -41,18 +39,15 @@ const PlayerPage = () => {
   }, [playerId, baseURL, roomCode, playerName]);
 
   const revealRole = () => {
-    // Logic to reveal role
     console.log(`Revealing role for player ID: ${playerId}`);
     setIsRoleRevealed(true);
 
-    // Set a timeout to hide the role after 5 seconds
     setTimeout(() => {
       setIsRoleRevealed(false);
     }, 5000);
   };
 
   const saveLastWill = () => {
-    // Logic to save last will
     console.log(`Saving last will for player ID: ${playerId}`);
     axios.post(`${baseURL}/api/player/${roomCode}/${playerId}/lastWill`, { lastWill })
       .then(() => {
@@ -85,7 +80,7 @@ const PlayerPage = () => {
         fullWidth
         margin="normal"
       />
-      <Button onClick={saveLastWill} variant="contained" color="primary" disabled={!hasLife} >
+      <Button onClick={saveLastWill} variant="contained" color="primary" disabled={!hasLife}>
         Save Last Will
       </Button>
     </Container>

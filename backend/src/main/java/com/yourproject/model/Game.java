@@ -45,13 +45,14 @@ public class Game {
         phase = "Day";
     }
 
-    public void advancePhase() {
+    public String advancePhase() {
         // Logic to advance phase, for example:
         if ("Day".equals(this.phase)) {
             this.phase = "Night";
         } else if ("Night".equals(this.phase)) {
             this.phase = "Day";
         }
+        return this.phase;
     }
 
     private void assignRoles(Map<String, Integer> roles) {

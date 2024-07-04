@@ -45,11 +45,20 @@ public class GameService {
         return null;
     }
 
-    public void advancePhase(String roomCode) {
+    public String advancePhase(String roomCode) {
         Game game = games.get(roomCode);
         if (game != null) {
-            game.advancePhase();
+            return game.advancePhase();
         }
+        return null;
+    }
+
+    public String getPhase(String roomCode) {
+        Game game = games.get(roomCode);
+        if (game != null) {
+            return game.getPhase();
+        }
+        return null;
     }
 
     public List<Player> getPlayers(String roomCode) {

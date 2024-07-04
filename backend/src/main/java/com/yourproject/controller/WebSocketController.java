@@ -27,7 +27,13 @@ public class WebSocketController {
     @MessageMapping("/startGame/{roomCode}")
     @SendTo("/topic/startGame/{roomCode}")
     public String startGame(String message) {
-        // Handle start game logic
         return HtmlUtils.htmlEscape(message);
+    }
+
+    @MessageMapping("/advancePhase/{roomCode}")
+    @SendTo("/topic/gamePhaseUpdate/{roomCode}")
+    public String advancePhase(@org.springframework.messaging.handler.annotation.DestinationVariable String roomCode) {
+        gameService.getPhase(roomCode);
+        return gameService.getPhase(roomCode);
     }
 }

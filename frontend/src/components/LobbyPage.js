@@ -11,13 +11,13 @@ import { useNavigate } from 'react-router-dom';
 const LobbyPage = () => {
   const { roomCode } = useParams();
   const [players, setPlayers] = useState([]);
-  const [roles, setRoles] = useState({ Mafia: 1, Detective: 1, Judge: 1 }); // Example role
-  const baseURL = window.location.origin; // Get the base URL
+  const [roles, setRoles] = useState({ Mafia: 1, Detective: 1, Judge: 1 });
+  const baseURL = window.location.origin;
   const baseURL8080 = window.location.origin.replace(':3000', ':8080');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch initial data for the room code
+
     axios.get(`${baseURL}/api/lobby/${roomCode}/players`)
       .then(response => {
         setPlayers(response.data);
@@ -26,14 +26,13 @@ const LobbyPage = () => {
         console.error('There was an error fetching the players!', error);
       });
 
-    // WebSocket connection to get real-time updates
     const socket = new SockJS(`${baseURL8080}/ws`);
     const stompClient = Stomp.over(socket);
 
     stompClient.connect({}, () => {
       stompClient.subscribe(`/topic/lobby/${roomCode}`, (message) => {
         const updatedPlayers = JSON.parse(message.body);
-        setPlayers(updatedPlayers); // Set the entire updated player list
+        setPlayers(updatedPlayers);
       });
     }, (error) => {
       console.error('STOMP error:', error);
@@ -45,7 +44,7 @@ const LobbyPage = () => {
   }, [roomCode]);
 
   const startGame = () => {
-    console.log('Starting game with roles:', roles);  // Add this line for logging
+    console.log('Starting game with roles:', roles);
     axios.post(`${baseURL8080}/api/lobby/${roomCode}/start`, roles)
       .then(() => {
         const socket = new SockJS(`${baseURL8080}/ws`);
@@ -72,7 +71,7 @@ const LobbyPage = () => {
     });
   };
 
-  const joinURL = `${baseURL}/join?roomCode=${roomCode}`; // Construct the join URL
+  const joinURL = `${baseURL}/join?roomCode=${roomCode}`;
 
   return (
     <Container style={{ padding: '20px' }}>
