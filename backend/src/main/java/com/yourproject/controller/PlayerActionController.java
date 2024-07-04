@@ -37,7 +37,9 @@ public class PlayerActionController {
         Game game = gameService.getGame(roomCode);
         if (game != null) {
             Player player = game.getPlayer(playerId);
-            return ResponseEntity.ok(player.getDetectiveInvestigationResult());
+            String result = player.getDetectiveInvestigationResult();
+            player.setDetectiveInvestigationResult("No results");
+            return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.notFound().build();
         }

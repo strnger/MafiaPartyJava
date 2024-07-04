@@ -29,10 +29,10 @@ const PlayerPage = () => {
         setLastWill(playerData.lastWill);
         setHasLife(playerData.hasLife);
 
-        axios.post(`${baseURL}/api/player/${roomCode}/${playerId}/lastWill`, { lastWill: "Will" })
+        // Save the last will to the backend
+        axios.post(`${baseURL}/api/player/${roomCode}/${playerId}/lastWill`, { lastWill: playerData.lastWill })
           .then(() => {
             console.log('Initial last will saved successfully');
-            setLastWill("Will");
           })
           .catch(error => {
             console.error('Error saving initial last will:', error);

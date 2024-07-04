@@ -32,7 +32,7 @@ public class Player {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.hasLife = true;
-        this.lastWill = "Type last will here";
+        this.lastWill = "will";
         this.killer = null;
     }
 

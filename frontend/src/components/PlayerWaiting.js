@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Container } from '@mui/material';
+import { Container, Button } from '@mui/material';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
@@ -64,6 +64,11 @@ useEffect(() => {
     }
   };
 
+
+    const verifyAlert = () => {
+      alert('This is a test alert to verify visibility.');
+    };
+
   return (
     <Container style={{ padding: '20px' }}>
       <h1>Waiting for the host to start the game</h1>
@@ -74,6 +79,9 @@ useEffect(() => {
         onChange={handleNameChange}
       />
       {!isConnected && <p>Connecting to server...</p>}
+  <Button onClick={verifyAlert} variant="contained" color="secondary" style={{ marginTop: '20px' }}>
+    Verify Alert
+  </Button>
     </Container>
   );
 };
