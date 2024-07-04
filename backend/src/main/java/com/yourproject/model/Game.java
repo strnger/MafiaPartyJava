@@ -1,5 +1,6 @@
 package com.yourproject.model;
 
+import java.util.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -54,7 +55,27 @@ public class Game {
     }
 
     private void assignRoles(Map<String, Integer> roles) {
-        // Assign roles to players. If there are more players than roles, assign the remaining players with "Generic Town"
+        // Create a list of all roles based on the roles map
+        List<String> roleList = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : roles.entrySet()) {
+            for (int i = 0; i < entry.getValue(); i++) {
+                roleList.add(entry.getKey());
+            }
+        }
+
+        // Shuffle the roles to ensure randomness
+        Collections.shuffle(roleList);
+
+        // Assign roles to players
+        int i = 0;
+        for (Player player : players) {
+            if (i < roleList.size()) {
+                player.setRole(roleList.get(i));
+            } else {
+                player.setRole("Generic Town");
+            }
+            i++;
+        }
     }
 
     public void updatePlayerName(Player updatedPlayer) {
