@@ -93,4 +93,12 @@ public class Game {
                 .findFirst()
                 .ifPresent(p -> p.setLastWill(lastWill));
     }
+
+    public void killPlayer(String playerId) {
+        this.getPlayers()
+                .stream()
+                .filter(p -> p.getId().equals(playerId))
+                .findFirst()
+                .ifPresent(p -> p.setHasLife(false));
+    }
 }

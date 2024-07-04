@@ -33,4 +33,16 @@ public class GameController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/{roomCode}/executePlayer/{playerId}")
+    public ResponseEntity<Game> executePlayer(@PathVariable String playerId,
+                                              @PathVariable String roomCode) {
+        Game game = gameService.getGame(roomCode);
+        if (game != null) {
+            game.killPlayer(playerId);
+            return ResponseEntity.ok(game);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
