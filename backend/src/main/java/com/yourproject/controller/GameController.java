@@ -37,6 +37,16 @@ public class GameController {
         }
     }
 
+    @GetMapping("/{roomCode}/getPhase")
+    public ResponseEntity<String> getPhase(@PathVariable String roomCode) {
+        Game game = gameService.getGame(roomCode);
+        if (game != null) {
+            return ResponseEntity.ok(game.getPhase());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/{roomCode}/executePlayer/{playerId}")
     public ResponseEntity<Game> executePlayer(@PathVariable String playerId,
                                               @PathVariable String roomCode) {

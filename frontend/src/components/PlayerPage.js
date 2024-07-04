@@ -34,6 +34,14 @@ const PlayerPage = () => {
         console.error('Error fetching player data:', error);
       });
 
+    axios.get(`${baseURL}/api/game/${roomCode}/getPhase`)
+      .then(response => {
+        setGamePhase(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching game phase:', error);
+      });
+
     const socket = new SockJS(`${baseURL}/ws`);
     const stompClient = Stomp.over(socket);
 
