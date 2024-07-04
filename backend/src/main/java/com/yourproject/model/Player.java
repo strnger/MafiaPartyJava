@@ -111,6 +111,9 @@ public class Player {
             this.killer = new Killer(killer, roomCode);
     }
 
+
+    //todo cleanup
+
     private String detectiveInvestigationResult;
 
     public String getDetectiveInvestigationResult() {

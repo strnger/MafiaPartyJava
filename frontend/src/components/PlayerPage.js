@@ -5,6 +5,7 @@ import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import DetectiveNightComponent from './DetectiveNightComponent';
+import MafiaNightComponent from './MafiaNightComponent';
 
 const PlayerPage = () => {
   const [lastWill, setLastWill] = useState('');
@@ -123,6 +124,9 @@ const PlayerPage = () => {
       </Button>
       {role.title === 'Detective' && gamePhase === 'Night' && (
         <DetectiveNightComponent roomCode={roomCode} playerId={playerId} />
+      )}
+      {role.allegiance === 'Mafia' && gamePhase === 'Night' && (
+        <MafiaNightComponent roomCode={roomCode} playerId={playerId} playerName={playerName} />
       )}
     </Container>
   );

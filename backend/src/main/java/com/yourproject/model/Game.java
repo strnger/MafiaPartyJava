@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Game {
     private String roomCode;
@@ -26,6 +27,7 @@ public class Game {
     public Game(String roomCode) {
         this.roomCode = roomCode;
         this.phase = "Lobby";
+        this.mafiaVotes = new HashMap<>();
     }
 
     public void addPlayer(Player player) {
@@ -135,5 +137,29 @@ public class Game {
             }
         }
         return null;
+    }
+
+    private Map<String, String> mafiaVotes; // playerId -> targetId
+
+
+
+    //todo cleanup
+
+    public void addMafiaVote(String playerId, String targetId) {
+        mafiaVotes.put(playerId, targetId);
+    }
+
+    public String getMafiaVoteResult() {
+        Map<String, Long> voteCount = mafiaVotes.values().stream()
+                .collect(Collectors.groupingBy(v -> v, Collectors.counting()));
+
+        return voteCount.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(null);
+    }
+
+    public void clearMafiaVotes() {
+        mafiaVotes.clear();
     }
 }
