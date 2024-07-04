@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button, List, ListItem, ListItemText } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { useNavigate } from 'react-router-dom';
 
 const GamePage = () => {
   const { roomCode } = useParams();
@@ -32,6 +35,34 @@ const GamePage = () => {
         });
     }
   }, [roomCode]);
+
+ useEffect(() => {
+   if (roomCode) {
+     // Fetch game state
+     axios.get(`${baseURL}/api/game?roomCode=${roomCode}`)
+       .then(response => {
+         if (response.data) {
+           console.log('Fetched game state:', response.data); // Debug log
+           setGameState(response.data);
+           setIsNightPhase(response.data.phase === 'Night');
+           setTimer(1);
+
+           // Navigate players if the game state is active
+           if (response.data.phase !== '') {
+             const socket = new SockJS(`${baseURL}/ws`);
+             const stompClient = Stomp.over(socket);
+
+             stompClient.connect({}, () => {
+               stompClient.send(`/app/startGame/${roomCode}`, {}, JSON.stringify({ roomCode }));
+             });
+           }
+         }
+       })
+       .catch(error => {
+         console.error('Error fetching game state:', error);
+       });
+   }
+ }, [roomCode]);
 
   useEffect(() => {
     let timerId;

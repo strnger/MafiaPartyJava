@@ -18,33 +18,35 @@ const PlayerWaiting = () => {
 
   const stompClientRef = useRef(null);
 
-  useEffect(() => {
-    setName(playerName);
+useEffect(() => {
+  setName(playerName);
 
-    const socket = new SockJS(`${baseURL}/ws`);
-    const stompClient = Stomp.over(socket);
-    stompClientRef.current = stompClient;
+  const socket = new SockJS(`${baseURL}/ws`);
+  const stompClient = Stomp.over(socket);
+  stompClientRef.current = stompClient;
 
-    stompClient.connect({}, () => {
-      console.log('Connected to WebSocket server');
-      setIsConnected(true);
-      stompClient.subscribe(`/topic/startGame/${roomCode}`, () => {
-        navigate(`/PlayerPage?playerId=${playerId}&playerName=${name}&role=${role}&lastWill=${lastWill}&hasLife=${hasLife}`);
-      });
-    }, (error) => {
-      console.error('STOMP error:', error);
-      setIsConnected(false);
+  stompClient.connect({}, () => {
+    console.log('Connected to WebSocket server');
+    setIsConnected(true);
+
+    stompClient.subscribe(`/topic/startGame/${roomCode}`, () => {
+      navigate(`/PlayerPage?playerId=${playerId}&playerName=${name}&role=${role}&lastWill=${lastWill}&hasLife=${hasLife}`);
     });
 
-    return () => {
-      if (stompClientRef.current) {
-        stompClientRef.current.disconnect(() => {
-          console.log('Disconnected from WebSocket server');
-          setIsConnected(false);
-        });
-      }
-    };
-  }, [navigate, roomCode, playerName, playerId, role, lastWill, hasLife]);
+  }, (error) => {
+    console.error('STOMP error:', error);
+    setIsConnected(false);
+  });
+
+  return () => {
+    if (stompClientRef.current) {
+      stompClientRef.current.disconnect(() => {
+        console.log('Disconnected from WebSocket server');
+        setIsConnected(false);
+      });
+    }
+  };
+}, [navigate, roomCode, playerName, playerId, role, lastWill, hasLife]);
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
