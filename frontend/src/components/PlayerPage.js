@@ -15,7 +15,7 @@ const PlayerPage = () => {
 
   useEffect(() => {
     // Fetch player's initial state
-    axios.get(`${baseURL}/api/player/${playerId}`)
+    axios.get(`${baseURL}/api/player/${roomCode}/${playerId}`)
       .then(response => {
         const playerData = response.data;
         setRole(playerData.role);

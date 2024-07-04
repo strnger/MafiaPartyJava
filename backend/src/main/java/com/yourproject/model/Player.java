@@ -8,14 +8,14 @@ public class Player {
 
     private String id;
     private String name;
-    private String role;
+    private Role role;
     private boolean hasLife;
     private String lastWill;
 
     @JsonCreator
     public Player(@JsonProperty("id") String id,
                   @JsonProperty("name") String name,
-                  @JsonProperty("role") String role,
+                  @JsonProperty("role") Role role,
                   @JsonProperty("hasLife") boolean hasLife,
                   @JsonProperty("lastWill") String lastWill) {
         this.id = id;
@@ -50,12 +50,30 @@ public class Player {
     }
 
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setRole(String role) {
+        switch (role)
+            {
+                case "Mafia":
+                    this.role = new Mafia();
+                    break;
+                case "Doctor":
+                    this.role = new Doctor();
+                    break;
+                case "Detective":
+                    this.role = new Detective();
+                    break;
+                default:
+                    this.role = new GenericTown();
+                    break;
+            }
     }
 
     public boolean isHasLife() {

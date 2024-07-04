@@ -123,4 +123,13 @@ public class Game {
                 .findFirst()
                 .ifPresent(p -> p.setHasLife(false));
     }
+
+    public Player getPlayer(String playerId) {
+        for (Player player : players) {
+            if (player.getId().equals(playerId)) {
+                return player;
+            }
+        }
+        return null;
+    }
 }
