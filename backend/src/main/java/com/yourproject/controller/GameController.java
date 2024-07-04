@@ -49,7 +49,7 @@ public class GameController {
         }
     }
 
-    @GetMapping("/{roomCode}")
+    @GetMapping("/{roomCode}/getPlayers")
     public ResponseEntity<List<Player>> getPlayers(@PathVariable String roomCode) {
         Game game = gameService.getGame(roomCode);
         if (game != null) {

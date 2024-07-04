@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import DetectiveNightComponent from './DetectiveNightComponent'; // Import the new component
 
 const PlayerPage = () => {
   const [lastWill, setLastWill] = useState('');
@@ -109,6 +110,11 @@ const PlayerPage = () => {
       <Button onClick={saveLastWill} variant="contained" color="primary" disabled={!hasLife}>
         Save Last Will
       </Button>
+      {/* Conditionally render components based on role and phase */}
+      {role.title === 'Detective' && gamePhase === 'Night' && (
+        <DetectiveNightComponent roomCode={roomCode} playerId={playerId} />
+      )}
+      {/* Add other conditional components here */}
     </Container>
   );
 };

@@ -112,7 +112,7 @@ public class Game {
     public void saveLastWill(String playerId, String lastWill) {
         this.getPlayers()
                 .stream()
-                .filter(p -> p.getId().equals(playerId))
+                .filter(p -> p.getId().equals(playerId) && p.isHasLife())
                 .findFirst()
                 .ifPresent(p -> p.setLastWill(lastWill));
     }
