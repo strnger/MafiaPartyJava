@@ -15,6 +15,8 @@ const PlayerPage = () => {
   const baseURL = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
+    console.log('PlayerName from URL:', playerName);
+
     // Fetch player's initial state
     axios.get(`${baseURL}/api/player/${roomCode}/${playerId}`)
       .then(response => {
@@ -26,7 +28,7 @@ const PlayerPage = () => {
       .catch(error => {
         console.error('Error fetching player data:', error);
       });
-  }, [playerId, baseURL, roomCode]);
+  }, [playerId, baseURL, roomCode, playerName]);
 
   const revealRole = () => {
     // Logic to reveal role
@@ -54,7 +56,6 @@ const PlayerPage = () => {
   return (
     <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Player: {playerName}</Typography>
-      <Typography variant="body1">Has Life: {hasLife ? 'Yes' : 'No'}</Typography>
       <Button onClick={revealRole} variant="contained" color="primary" disabled={isRoleRevealed}>
         {isRoleRevealed ? `Role: ${role.title}` : 'Reveal Role'}
       </Button>
@@ -74,7 +75,7 @@ const PlayerPage = () => {
         fullWidth
         margin="normal"
       />
-      <Button onClick={saveLastWill} variant="contained" color="primary">
+      <Button onClick={saveLastWill} variant="contained" color="primary" disabled={!hasLife} >
         Save Last Will
       </Button>
     </Container>

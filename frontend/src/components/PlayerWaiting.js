@@ -31,6 +31,7 @@ useEffect(() => {
     setIsConnected(true);
 
     stompClient.subscribe(`/topic/startGame/${roomCode}`, () => {
+      console.log('Navigating to PlayerPage with params:', { playerId, playerName, roomCode });
       navigate(`/PlayerPage?playerId=${playerId}&playerName=${playerName}&roomCode=${roomCode}`);
     });
 

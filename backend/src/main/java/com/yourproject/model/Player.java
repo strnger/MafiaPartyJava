@@ -11,6 +11,7 @@ public class Player {
     private Role role;
     private boolean hasLife;
     private String lastWill;
+    private String player;
 
     @JsonCreator
     public Player(@JsonProperty("id") String id,
