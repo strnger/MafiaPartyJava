@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography, Container } from '@mui/material';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ const JoinPage = () => {
   };
 
   return (
-    <div>
+    <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Join Game</Typography>
       <TextField
         label="Room Code"
@@ -47,7 +47,7 @@ const JoinPage = () => {
         fullWidth
       />
       <Button onClick={joinGame} variant="contained" color="primary">Join</Button>
-    </div>
+    </Container>
   );
 };
 

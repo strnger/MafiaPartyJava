@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, List, ListItem, ListItemText } from '@mui/material';
+import { Button, List, ListItem, ListItemText, Container } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
@@ -63,7 +63,7 @@ const LobbyPage = () => {
   const joinURL = `${baseURL}/join?roomCode=${roomCode}`; // Construct the join URL
 
   return (
-    <div>
+    <Container style={{ padding: '20px' }}>
       <h1>Lobby</h1>
       <p>Room Code: {roomCode}</p>
       <QRCode value={joinURL} /> {/* Update QRCode component */}
@@ -78,7 +78,7 @@ const LobbyPage = () => {
         {/* Role Configuration UI */}
       </div>
       <Button onClick={startGame} variant="contained" color="primary">Start Game</Button>
-    </div>
+    </Container>
   );
 };
 

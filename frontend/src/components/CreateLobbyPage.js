@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Button, Typography, Container } from '@mui/material';
 import axios from 'axios';
 
 const CreateLobbyPage = () => {
@@ -17,11 +17,11 @@ const CreateLobbyPage = () => {
   }, []);
 
   return (
-    <div>
+    <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Lobby Created</Typography>
       <Typography variant="h6">Room Code: {roomCode}</Typography>
       <Button href={`/lobby/${roomCode}`} variant="contained" color="primary">Go to Lobby</Button>
-    </div>
+    </Container>
   );
 };
 

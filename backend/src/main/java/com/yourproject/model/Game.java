@@ -97,7 +97,7 @@ public class Game {
     public void killPlayer(String playerId) {
         this.getPlayers()
                 .stream()
-                .filter(p -> p.getId().equals(playerId))
+                .filter(p -> p.getId().equals(playerId) && p.isHasLife())
                 .findFirst()
                 .ifPresent(p -> p.setHasLife(false));
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Container } from '@mui/material';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 
@@ -63,7 +64,7 @@ useEffect(() => {
   };
 
   return (
-    <div>
+    <Container style={{ padding: '20px' }}>
       <h1>Waiting for the host to start the game</h1>
       <input
         type="text"
@@ -72,7 +73,7 @@ useEffect(() => {
         onChange={handleNameChange}
       />
       {!isConnected && <p>Connecting to server...</p>}
-    </div>
+    </Container>
   );
 };
 

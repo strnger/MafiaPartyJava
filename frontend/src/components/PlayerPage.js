@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography, Container } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 
@@ -45,7 +45,7 @@ const PlayerPage = () => {
   };
 
   return (
-    <div>
+    <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Player: {playerName}</Typography>
       <Button onClick={revealRole} variant="contained" color="primary" disabled={isRoleRevealed}>
         {isRoleRevealed ? `Role: ${role}` : 'Reveal Role'}
@@ -63,7 +63,7 @@ const PlayerPage = () => {
       <Button onClick={saveLastWill} variant="contained" color="primary">
         Save Last Will
       </Button>
-    </div>
+    </Container>
   );
 };
 

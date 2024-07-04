@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, List, ListItem, ListItemText } from '@mui/material';
+import { Button, List, ListItem, ListItemText, Container } from '@mui/material';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
@@ -123,12 +123,12 @@ const GamePage = () => {
   };
 
   return (
-    <div>
+    <Container style={{ padding: '20px' }}>
       <h1>{gameState.phase ? gameState.phase : 'Game'}</h1>
       {isNightPhase && <div>Night phase ends in: {timer} seconds</div>}
       <List>
         {gameState.players && gameState.players.map(player => (
-          <ListItem key={player.id}> {/* Use player.id as key */}
+          <ListItem key={player.id} style={{ display: 'flex', alignItems: 'center' }}> {/* Use player.id as key */}
             <ListItemText primary={player.name} secondary={player.hasLife ? 'Alive' : `Dead (Role: ${player.role}, Last Will: ${player.lastWill})`} />
             {player.hasLife && (
               <Button
@@ -150,7 +150,7 @@ const GamePage = () => {
       >
         {isNightPhase ? 'Manual Override' : 'Advance Phase'}
       </Button>
-    </div>
+    </Container>
   );
 };
 
