@@ -85,4 +85,12 @@ public class Game {
     public void setWinners(List<Player> winners) {
         this.winners = winners;
     }
+
+    public void saveLastWill(String playerId, String lastWill) {
+        this.getPlayers()
+                .stream()
+                .filter(p -> p.getId().equals(playerId))
+                .findFirst()
+                .ifPresent(p -> p.setLastWill(lastWill));
+    }
 }

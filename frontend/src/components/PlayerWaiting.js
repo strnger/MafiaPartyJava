@@ -30,7 +30,7 @@ useEffect(() => {
     setIsConnected(true);
 
     stompClient.subscribe(`/topic/startGame/${roomCode}`, () => {
-      navigate(`/PlayerPage?playerId=${playerId}&playerName=${name}&role=${role}&lastWill=${lastWill}&hasLife=${hasLife}`);
+      navigate(`/PlayerPage?playerId=${playerId}&playerName=${name}&role=${role}&roomCode=${roomCode}`);
     });
 
   }, (error) => {
