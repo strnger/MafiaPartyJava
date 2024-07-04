@@ -104,11 +104,12 @@ public class Player {
         this.killer = killer;
     }
 
-    public void setKiller(String killer, String roomCode) {
+    public void setKiller(String killer, String roleOfKiller) {
         if(killer.equals("Executed"))
-            this.killer = new Killer("Executed", roomCode);
-        else
-            this.killer = new Killer(killer, roomCode);
+            this.killer = new Killer();
+        else {
+            this.killer = new Killer(killer, roleOfKiller);
+        }
     }
 
 

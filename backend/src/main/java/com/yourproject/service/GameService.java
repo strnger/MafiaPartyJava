@@ -50,7 +50,14 @@ public class GameService {
         if (game != null) {
             String phase = game.advancePhase();
             if(phase.equals("Day")){
-                String result = game.getMafiaVoteResult();
+
+                //handle mafia killing
+                String mafiaMurderTarget = game.getMafiaVoteResult();
+                if(mafiaMurderTarget != null) {
+                    game.murderPlayer(mafiaMurderTarget, game.getMafioso(), roomCode);
+                    game.clearMafiaVotes();
+                }
+
             }
 
 

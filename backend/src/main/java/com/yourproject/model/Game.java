@@ -119,16 +119,31 @@ public class Game {
                 .ifPresent(p -> p.setLastWill(lastWill));
     }
 
-    public void executePlayer(String playerId) {
+    //todo - simplify the kill logic
+    public void executePlayer(String playerIdToKill) {
         this.getPlayers()
                 .stream()
-                .filter(p -> p.getId().equals(playerId) && p.isHasLife())
+                .filter(p -> p.getId().equals(playerIdToKill) && p.isHasLife())
                 .findFirst()
                 .ifPresent(p -> {
                     p.setHasLife(false);
                     p.setKiller("Executed", "irrelevant");
                 });
     }
+
+    public void murderPlayer(String victimPlayerId, String murdererPlayerId, String roomCode ) {
+        String roleOfKiller = this.getPlayer(murdererPlayerId).getRole().getTitle();
+
+        this.getPlayers()
+                .stream()
+                .filter(p -> p.getId().equals(victimPlayerId) && p.isHasLife())
+                .findFirst()
+                .ifPresent(p -> {
+                    p.setHasLife(false);
+                    p.setKiller(murdererPlayerId, roleOfKiller);
+                });
+    }
+
 
     public Player getPlayer(String playerId) {
         for (Player player : players) {
@@ -139,11 +154,15 @@ public class Game {
         return null;
     }
 
-    private Map<String, String> mafiaVotes; // playerId -> targetId
-
 
 
     //todo cleanup
+
+
+    private Map<String, String> mafiaVotes; // playerId -> targetId
+
+    String mafioso;
+
 
     public void addMafiaVote(String playerId, String targetId) {
         mafiaVotes.put(playerId, targetId);
@@ -153,10 +172,49 @@ public class Game {
         Map<String, Long> voteCount = mafiaVotes.values().stream()
                 .collect(Collectors.groupingBy(v -> v, Collectors.counting()));
 
-        return voteCount.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse(null);
+        // Find the target with the highest vote count
+        Optional<Map.Entry<String, Long>> maxEntry = voteCount.entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+
+        if (maxEntry.isPresent()) {
+            long maxVotes = maxEntry.get().getValue();
+            List<String> topTargets = voteCount.entrySet().stream()
+                    .filter(entry -> entry.getValue() == maxVotes)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+
+            String selectedTarget;
+            if (topTargets.size() == 1) {
+                selectedTarget = topTargets.get(0);
+            } else {
+                // Randomly select a target if there is a tie
+                Random random = new Random();
+                selectedTarget = topTargets.get(random.nextInt(topTargets.size()));
+            }
+
+            // Set mafioso as one of the players who voted for the selected target
+            setMafioso(mafiaVotes.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(selectedTarget))
+                    .map(Map.Entry::getKey)
+                    .findAny()
+                    .orElse(null));
+
+            return selectedTarget;
+        } else {
+            return null; // No votes cast
+        }
+    }
+
+    public String getMafioso() {
+        return mafioso;
+    }
+
+    public void setMafioso(String mafioso) {
+        this.mafioso = mafioso;
+    }
+
+    public Map<String, String> getMafiaVotes() {
+        return mafiaVotes;
     }
 
     public void clearMafiaVotes() {

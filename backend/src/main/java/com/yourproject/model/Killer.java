@@ -4,25 +4,18 @@ import com.yourproject.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Killer {
-    @Autowired
-    private GameService gameService;
     private String playerIdOfKiller;
     private String roleOfKiller;
 
-    public Killer(String playerIdOfKiller, String roomCode){
-        if(playerIdOfKiller.equals("Executed")){
+    public Killer(){
             this.playerIdOfKiller = "Executed";
             this.roleOfKiller = "the just rule of the town";
-        }else{
+    }
+
+
+    public Killer(String playerIdOfKiller, String roleOfKiller){
             this.playerIdOfKiller = playerIdOfKiller;
-            Game game = gameService.getGame(roomCode);
-            this.roleOfKiller = game.getPlayers()
-                    .stream()
-                    .filter(p -> p.getId().equals(playerIdOfKiller))
-                    .findFirst()
-                    .map(p -> p.getRole().getTitle())
-                    .orElse(null);
-        }
+            this.roleOfKiller = roleOfKiller;
     }
 
     public String getPlayerIdOfKiller() {
