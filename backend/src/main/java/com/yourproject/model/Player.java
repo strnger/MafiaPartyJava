@@ -9,26 +9,26 @@ public class Player {
     private String id;
     private String name;
     private String role;
-    private boolean isAlive;
+    private boolean hasLife;
     private String lastWill;
 
     @JsonCreator
     public Player(@JsonProperty("id") String id,
                   @JsonProperty("name") String name,
                   @JsonProperty("role") String role,
-                  @JsonProperty("isAlive") boolean isAlive,
+                  @JsonProperty("hasLife") boolean hasLife,
                   @JsonProperty("lastWill") String lastWill) {
         this.id = id;
         this.name = name;
         this.role = role;
-        this.isAlive = isAlive;
+        this.hasLife = hasLife;
         this.lastWill = lastWill;
     }
 
     public Player(String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
-        this.isAlive = true;
+        this.hasLife = true;
         this.lastWill = "Type last will here";
     }
 
@@ -58,12 +58,12 @@ public class Player {
         this.role = role;
     }
 
-    public boolean isAlive() {
-        return isAlive;
+    public boolean isHasLife() {
+        return hasLife;
     }
 
-    public void setAlive(boolean alive) {
-        isAlive = alive;
+    public void setHasLife(boolean hasLife) {
+        this.hasLife = hasLife;
     }
 
     public String getLastWill() {

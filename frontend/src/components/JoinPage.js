@@ -21,8 +21,8 @@ const JoinPage = () => {
   const joinGame = () => {
     axios.post(`${baseURL}/api/lobby/join?roomCode=${roomCode}&playerName=${name}`)
       .then(response => {
-        const { id, name, role, lastWill, alive } = response.data;
-        navigate(`/PlayerWaiting?roomCode=${roomCode}&playerId=${id}&playerName=${name}&role=${role}&lastWill=${lastWill}&alive=${alive}`);
+        const { id, name, role, lastWill, hasLife } = response.data;
+        navigate(`/PlayerWaiting?roomCode=${roomCode}&playerId=${id}&playerName=${name}&role=${role}&lastWill=${lastWill}&hasLife=${hasLife}`);
       })
       .catch(error => {
         console.error('There was an error joining the game!', error);

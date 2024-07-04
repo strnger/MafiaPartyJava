@@ -11,7 +11,7 @@ const GamePage = () => {
     roomCode: '',
     winners: []
   });
-  const [timer, setTimer] = useState(45);
+  const [timer, setTimer] = useState(1);
   const [isNightPhase, setIsNightPhase] = useState(false);
   const baseURL = window.location.origin.replace(':3000', ':8080');
 
@@ -24,7 +24,7 @@ const GamePage = () => {
             console.log('Fetched game state:', response.data); // Debug log
             setGameState(response.data);
             setIsNightPhase(response.data.phase === 'Night');
-            setTimer(45);
+            setTimer(1);
           }
         })
         .catch(error => {
@@ -41,7 +41,7 @@ const GamePage = () => {
           if (prevTimer <= 1) {
             clearInterval(timerId);
             advancePhase();
-            return 45;
+            return 1;
           }
           return prevTimer - 1;
         });
@@ -57,7 +57,7 @@ const GamePage = () => {
           console.log('Advanced phase:', response.data); // Debug log
           setGameState(response.data);
           setIsNightPhase(response.data.phase === 'Night');
-          setTimer(45);
+          setTimer(1);
         }
       })
       .catch(error => {
@@ -72,7 +72,7 @@ const GamePage = () => {
       <List>
         {gameState.players && gameState.players.map(player => (
           <ListItem key={player.id}> {/* Use player.id as key */}
-            <ListItemText primary={player.name} secondary={player.isAlive ? 'Alive' : `Dead (Role: ${player.role}, Last Will: ${player.lastWill})`} />
+            <ListItemText primary={player.name} secondary={player.hasLife ? 'Alive' : `Dead (Role: ${player.role}, Last Will: ${player.lastWill})`} />
           </ListItem>
         ))}
       </List>

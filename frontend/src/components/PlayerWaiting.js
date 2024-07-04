@@ -13,7 +13,7 @@ const PlayerWaiting = () => {
   const playerId = new URLSearchParams(location.search).get('playerId');
   const role = new URLSearchParams(location.search).get('role');
   const lastWill = new URLSearchParams(location.search).get('lastWill');
-  const alive = new URLSearchParams(location.search).get('alive');
+  const hasLife = new URLSearchParams(location.search).get('hasLife');
   const baseURL = window.location.origin.replace(':3000', ':8080');
 
   const stompClientRef = useRef(null);
@@ -29,7 +29,7 @@ const PlayerWaiting = () => {
       console.log('Connected to WebSocket server');
       setIsConnected(true);
       stompClient.subscribe(`/topic/startGame/${roomCode}`, () => {
-        navigate(`/PlayerPage?playerId=${playerId}&playerName=${name}&role=${role}&lastWill=${lastWill}&alive=${alive}`);
+        navigate(`/PlayerPage?playerId=${playerId}&playerName=${name}&role=${role}&lastWill=${lastWill}&hasLife=${hasLife}`);
       });
     }, (error) => {
       console.error('STOMP error:', error);
@@ -44,7 +44,7 @@ const PlayerWaiting = () => {
         });
       }
     };
-  }, [navigate, roomCode, playerName, playerId, role, lastWill, alive]);
+  }, [navigate, roomCode, playerName, playerId, role, lastWill, hasLife]);
 
   const handleNameChange = (e) => {
     const newName = e.target.value;
