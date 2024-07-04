@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
     private String roomCode;
@@ -38,8 +39,8 @@ public class Game {
         players.add(player);
     }
 
-    public void start() {
-        assignRoles();
+    public void start(Map<String, Integer> roles) {
+        assignRoles(roles);
         phase = "Day";
     }
 
@@ -52,8 +53,8 @@ public class Game {
         }
     }
 
-    private void assignRoles() {
-        // Random role assignment logic
+    private void assignRoles(Map<String, Integer> roles) {
+        // Assign roles to players. If there are more players than roles, assign the remaining players with "Generic Town"
     }
 
     public void updatePlayerName(Player updatedPlayer) {

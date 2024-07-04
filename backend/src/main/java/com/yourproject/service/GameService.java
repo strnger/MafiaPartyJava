@@ -36,10 +36,10 @@ public class GameService {
         }
     }
 
-    public Game startGame(String roomCode) {
+    public Game startGame(String roomCode, Map<String, Integer> roles) {
         Game game = games.get(roomCode);
         if (game != null) {
-            game.start();
+            game.start(roles);
             return game;
         }
         return null;

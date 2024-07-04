@@ -45,7 +45,8 @@ const LobbyPage = () => {
   }, [roomCode]);
 
   const startGame = () => {
-    axios.post(`${baseURL8080}/api/lobby/start?roomCode=${roomCode}`)
+    console.log('Starting game with roles:', roles);  // Add this line for logging
+    axios.post(`${baseURL8080}/api/lobby/${roomCode}/start`, roles)
       .then(() => {
         const socket = new SockJS(`${baseURL8080}/ws`);
         const stompClient = Stomp.over(socket);

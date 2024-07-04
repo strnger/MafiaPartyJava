@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import com.yourproject.model.Player;
 import com.yourproject.service.GameService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +30,10 @@ public class LobbyController {
     }
 
 
-    @PostMapping("/start")
-    public ResponseEntity<Game> startGame(@RequestParam String roomCode) {
-        Game game = gameService.startGame(roomCode);
+    @PostMapping("/{roomCode}/start")
+    public ResponseEntity<Game> startGame(@PathVariable String roomCode,
+                                          @RequestBody Map<String, Integer> roles) {
+        Game game = gameService.startGame(roomCode, roles);
         return ResponseEntity.ok(game);
     }
 
