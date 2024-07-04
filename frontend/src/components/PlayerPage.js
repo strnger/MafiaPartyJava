@@ -5,7 +5,8 @@ import axios from 'axios';
 
 const PlayerPage = () => {
   const [lastWill, setLastWill] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState({});
+  const [hasLife, setHasLife] = useState(false);
   const [isRoleRevealed, setIsRoleRevealed] = useState(false);
   const location = useLocation();
   const roomCode = new URLSearchParams(location.search).get('roomCode');
@@ -20,16 +21,22 @@ const PlayerPage = () => {
         const playerData = response.data;
         setRole(playerData.role);
         setLastWill(playerData.lastWill);
+        setHasLife(playerData.hasLife);
       })
       .catch(error => {
         console.error('Error fetching player data:', error);
       });
-  }, [playerId, baseURL]);
+  }, [playerId, baseURL, roomCode]);
 
   const revealRole = () => {
     // Logic to reveal role
     console.log(`Revealing role for player ID: ${playerId}`);
     setIsRoleRevealed(true);
+
+    // Set a timeout to hide the role after 5 seconds
+    setTimeout(() => {
+      setIsRoleRevealed(false);
+    }, 5000);
   };
 
   const saveLastWill = () => {
@@ -47,9 +54,16 @@ const PlayerPage = () => {
   return (
     <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Player: {playerName}</Typography>
+      <Typography variant="body1">Has Life: {hasLife ? 'Yes' : 'No'}</Typography>
       <Button onClick={revealRole} variant="contained" color="primary" disabled={isRoleRevealed}>
-        {isRoleRevealed ? `Role: ${role}` : 'Reveal Role'}
+        {isRoleRevealed ? `Role: ${role.title}` : 'Reveal Role'}
       </Button>
+      {isRoleRevealed && (
+        <div>
+          <Typography variant="body1">Role Objective: {role.objective}</Typography>
+          <Typography variant="body1">Role Description: {role.description}</Typography>
+        </div>
+      )}
       <TextField
         label="Last Will"
         value={lastWill}
