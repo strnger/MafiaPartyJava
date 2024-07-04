@@ -48,8 +48,9 @@ public class GameService {
     public String advancePhase(String roomCode) {
         Game game = games.get(roomCode);
         if (game != null) {
+            String phase = game.advancePhase();
             messagingTemplate.convertAndSend("/topic/gamePhaseUpdate/" + roomCode, game);
-            return game.advancePhase();
+            return phase;
         }
         return null;
     }

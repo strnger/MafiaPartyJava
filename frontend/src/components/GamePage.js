@@ -4,9 +4,6 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useNavigate } from 'react-router-dom';
-
-const TIMER_DURATION = 3; // 3 seconds timer duration
 
 const GamePage = () => {
   const { roomCode } = useParams();
@@ -16,8 +13,6 @@ const GamePage = () => {
     roomCode: '',
     winners: []
   });
-  const [timer, setTimer] = useState(TIMER_DURATION);
-  const [isNightPhase, setIsNightPhase] = useState(false);
   const baseURL = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
@@ -28,8 +23,6 @@ const GamePage = () => {
           if (response.data) {
             console.log('Fetched game state:', response.data); // Debug log
             setGameState(response.data);
-            setIsNightPhase(response.data.phase === 'Night');
-            setTimer(TIMER_DURATION);
 
             // Navigate players if the game state is active
             if (response.data.phase !== '') {
@@ -48,39 +41,12 @@ const GamePage = () => {
     }
   }, [roomCode]);
 
-  useEffect(() => {
-    let timerId;
-    if (isNightPhase) {
-      console.log('Starting timer for night phase');
-      timerId = setInterval(() => {
-        setTimer(prevTimer => {
-          if (prevTimer <= 1) {
-            console.log('Timer ended, advancing phase');
-            clearInterval(timerId);
-            advancePhase();
-            return TIMER_DURATION;
-          }
-          console.log('Timer tick:', prevTimer - 1);
-          return prevTimer - 1;
-        });
-      }, 1000);
-    }
-    return () => {
-      if (timerId) {
-        console.log('Clearing timer');
-        clearInterval(timerId);
-      }
-    };
-  }, [isNightPhase]);
-
   const advancePhase = () => {
     axios.post(`${baseURL}/api/game/advancePhase?roomCode=${roomCode}`)
       .then(response => {
         if (response.data) {
           console.log('Advanced phase:', response.data);
           setGameState(response.data);
-          setIsNightPhase(response.data.phase === 'Night');
-          setTimer(TIMER_DURATION);
 
           if (response.data.phase === 'Day') {
             axios.get(`${baseURL}/api/game?roomCode=${roomCode}`)
@@ -122,8 +88,7 @@ const GamePage = () => {
 
   return (
     <Container style={{ padding: '20px' }}>
-      <h1>{gameState.phase ? gameState.phase : 'Game'}</h1>
-      {isNightPhase && <div>Night phase ends in: {timer} seconds</div>}
+      <h1>{gameState.phase}</h1>
       <List>
         {gameState.players && gameState.players.map(player => (
           <ListItem key={player.id} style={{ display: 'flex', alignItems: 'center' }}>
@@ -146,7 +111,7 @@ const GamePage = () => {
         variant="contained"
         color="primary"
       >
-        {isNightPhase ? 'Manual Override' : 'Advance Phase'}
+        Advance Phase
       </Button>
     </Container>
   );

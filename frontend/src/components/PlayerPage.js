@@ -86,7 +86,7 @@ const PlayerPage = () => {
   return (
     <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Player: {playerName}</Typography>
-      <Typography variant="h6">Current Phase: {gamePhase}</Typography>
+      <Typography variant="h6">Current Phase: {gamePhase || "First day"}</Typography>
       <Button onClick={revealRole} variant="contained" color="primary" disabled={isRoleRevealed}>
         {isRoleRevealed ? `Role: ${role.title}` : 'Reveal Role'}
       </Button>
