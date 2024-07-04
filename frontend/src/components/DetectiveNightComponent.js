@@ -1,25 +1,33 @@
-// src/components/DetectiveNightComponent.js
 import React, { useState, useEffect } from 'react';
 import { Button, Typography } from '@mui/material';
 import axios from 'axios';
 
 const DetectiveNightComponent = ({ roomCode, playerId }) => {
   const [players, setPlayers] = useState([]);
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [investigatingPlayer, setInvestigatingPlayer] = useState('');
 
   useEffect(() => {
     axios.get(`${window.location.origin.replace(':3000', ':8080')}/api/game/${roomCode}/getPlayers`)
       .then(response => {
-        const alivePlayers = response.data.filter(player => player.hasLife);
+        const alivePlayers = response.data.filter(player => player.hasLife && player.id !== playerId);
         setPlayers(alivePlayers);
       })
       .catch(error => {
         console.error('Error fetching players:', error);
       });
-  }, [roomCode]);
+  }, [roomCode, playerId]);
 
-  const handlePlayerClick = (playerId) => {
-    // Handle player click logic here
-    console.log(`Detective clicked on player with ID: ${playerId}`);
+  const handlePlayerClick = (targetId, targetName) => {
+    setSelectedPlayer(targetId);
+    setInvestigatingPlayer(targetName);
+    axios.post(`${window.location.origin.replace(':3000', ':8080')}/api/playerAction/${roomCode}/${playerId}/detectiveInvestigatePlayer?targetId=${targetId}`)
+      .then(response => {
+        console.log(`Investigating ${targetName}: ${response.data}`);
+      })
+      .catch(error => {
+        console.error('Error investigating player:', error);
+      });
   };
 
   return (
@@ -29,9 +37,10 @@ const DetectiveNightComponent = ({ roomCode, playerId }) => {
         <Button
           key={player.id}
           variant="contained"
-          onClick={() => handlePlayerClick(player.id)}
+          onClick={() => handlePlayerClick(player.id, player.name)}
+          disabled={selectedPlayer !== null && selectedPlayer !== player.id}
         >
-          {player.name}
+          {selectedPlayer === player.id ? `Investigating ${player.name}` : player.name}
         </Button>
       ))}
     </div>

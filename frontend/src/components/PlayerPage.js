@@ -12,6 +12,7 @@ const PlayerPage = () => {
   const [hasLife, setHasLife] = useState(false);
   const [isRoleRevealed, setIsRoleRevealed] = useState(false);
   const [gamePhase, setGamePhase] = useState('');
+  const [investigationResult, setInvestigationResult] = useState(null);
   const location = useLocation();
   const roomCode = new URLSearchParams(location.search).get('roomCode');
   const playerId = new URLSearchParams(location.search).get('playerId');
@@ -50,6 +51,16 @@ const PlayerPage = () => {
         const updatedPhase = JSON.parse(message.body).phase;
         console.log('Received game phase update:', updatedPhase);
         setGamePhase(updatedPhase);
+        if (updatedPhase === 'Day' && role.title === 'Detective') {
+          axios.get(`${baseURL}/api/playerAction/${roomCode}/${playerId}/investigationResult`)
+            .then(response => {
+              setInvestigationResult(response.data);
+              alert(`Investigation Result: ${response.data}`);
+            })
+            .catch(error => {
+              console.error('Error fetching investigation result:', error);
+            });
+        }
       }, (error) => {
         console.error('Error subscribing to game phase updates:', error);
       });
@@ -62,7 +73,7 @@ const PlayerPage = () => {
         console.log('WebSocket disconnected');
       });
     };
-  }, [playerId, baseURL, roomCode, playerName]);
+  }, [playerId, baseURL, roomCode, playerName, role.title]);
 
   const revealRole = () => {
     console.log(`Revealing role for player ID: ${playerId}`);

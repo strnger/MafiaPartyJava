@@ -110,4 +110,14 @@ public class Player {
         else
             this.killer = new Killer(killer, roomCode);
     }
+
+    private String detectiveInvestigationResult;
+
+    public String getDetectiveInvestigationResult() {
+        return detectiveInvestigationResult;
+    }
+
+    public void setDetectiveInvestigationResult(String result) {
+        this.detectiveInvestigationResult = result;
+    }
 }

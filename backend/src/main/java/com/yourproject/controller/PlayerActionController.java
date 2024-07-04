@@ -20,12 +20,24 @@ public class PlayerActionController {
         Game game = gameService.getGame(roomCode);
         if (game != null) {
             Player initiatorPlayer = game.getPlayer(playerId);
-            if(initiatorPlayer.getRole().getTitle().equals("Detective") ){ //sanity check
+            if (initiatorPlayer.getRole().getTitle().equals("Detective")) { // sanity check
                 Player targetPlayer = game.getPlayer(targetId);
-                String result = targetPlayer.getRole().getAllegiance().equals("Town") || targetPlayer.getRole().getAllegiance().equals("Neutral") ? "Friend" : "FOE!";
+                String result = targetPlayer.getRole().getAllegiance().equals("Town") || targetPlayer.getRole().getAllegiance().equals("Neutral") ? targetPlayer.getName() +  "is a friend" : targetPlayer.getName() +  "is a FOE!";
+                initiatorPlayer.setDetectiveInvestigationResult(result);
                 return ResponseEntity.ok(result);
             }
             return ResponseEntity.ok("You are not a Detective");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{roomCode}/{playerId}/investigationResult")
+    public ResponseEntity<String> getInvestigationResult(@PathVariable String roomCode, @PathVariable String playerId) {
+        Game game = gameService.getGame(roomCode);
+        if (game != null) {
+            Player player = game.getPlayer(playerId);
+            return ResponseEntity.ok(player.getDetectiveInvestigationResult());
         } else {
             return ResponseEntity.notFound().build();
         }
