@@ -39,7 +39,7 @@ public class GameController {
                                               @PathVariable String roomCode) {
         Game game = gameService.getGame(roomCode);
         if (game != null) {
-            game.killPlayer(playerId);
+            game.executePlayer(playerId);
             return ResponseEntity.ok(game);
         } else {
             return ResponseEntity.notFound().build();

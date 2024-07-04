@@ -129,7 +129,7 @@ const GamePage = () => {
       <List>
         {gameState.players && gameState.players.map(player => (
           <ListItem key={player.id} style={{ display: 'flex', alignItems: 'center' }}> {/* Use player.id as key */}
-            <ListItemText primary={player.name} secondary={player.hasLife ? 'Alive' : `Dead - Role: ${player.role.title}, Last Will: ${JSON.parse(player.lastWill).lastWill} `} />
+            <ListItemText primary={player.name} secondary={player.hasLife ? 'Alive' : `Killed by ${player.killer.roleOfKiller} - Role: ${player.role.title} - Last Will: ${JSON.parse(player.lastWill).lastWill} `} />
             {player.hasLife && (
               <Button
                 onClick={() => executePlayer(player.id)}

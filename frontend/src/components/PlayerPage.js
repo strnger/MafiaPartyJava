@@ -24,6 +24,16 @@ const PlayerPage = () => {
         setRole(playerData.role);
         setLastWill(playerData.lastWill);
         setHasLife(playerData.hasLife);
+
+        // Save "Will" as the last will when the page loads for the first time
+        axios.post(`${baseURL}/api/player/${roomCode}/${playerId}/lastWill`, { lastWill: "Will" })
+          .then(() => {
+            console.log('Initial last will saved successfully');
+            setLastWill("Will"); // Update the state to reflect the saved will
+          })
+          .catch(error => {
+            console.error('Error saving initial last will:', error);
+          });
       })
       .catch(error => {
         console.error('Error fetching player data:', error);

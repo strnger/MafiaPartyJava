@@ -11,19 +11,21 @@ public class Player {
     private Role role;
     private boolean hasLife;
     private String lastWill;
-    private String player;
+    private Killer killer;
 
     @JsonCreator
     public Player(@JsonProperty("id") String id,
                   @JsonProperty("name") String name,
                   @JsonProperty("role") Role role,
                   @JsonProperty("hasLife") boolean hasLife,
-                  @JsonProperty("lastWill") String lastWill) {
+                  @JsonProperty("lastWill") String lastWill,
+                  @JsonProperty("killer") Killer killer) {
         this.id = id;
         this.name = name;
         this.role = role;
         this.hasLife = hasLife;
         this.lastWill = lastWill;
+        this.killer = killer;
     }
 
     public Player(String name) {
@@ -31,6 +33,7 @@ public class Player {
         this.name = name;
         this.hasLife = true;
         this.lastWill = "Type last will here";
+        this.killer = null;
     }
 
     // Getters and setters
@@ -93,4 +96,18 @@ public class Player {
         this.lastWill = lastWill;
     }
 
+    public Killer getKiller() {
+        return killer;
+    }
+
+    public void setKiller() {
+        this.killer = killer;
+    }
+
+    public void setKiller(String killer, String roomCode) {
+        if(killer.equals("Executed"))
+            this.killer = new Killer("Executed", roomCode);
+        else
+            this.killer = new Killer(killer, roomCode);
+    }
 }

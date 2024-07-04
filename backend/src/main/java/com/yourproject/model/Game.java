@@ -116,12 +116,15 @@ public class Game {
                 .ifPresent(p -> p.setLastWill(lastWill));
     }
 
-    public void killPlayer(String playerId) {
+    public void executePlayer(String playerId) {
         this.getPlayers()
                 .stream()
                 .filter(p -> p.getId().equals(playerId) && p.isHasLife())
                 .findFirst()
-                .ifPresent(p -> p.setHasLife(false));
+                .ifPresent(p -> {
+                    p.setHasLife(false);
+                    p.setKiller("Executed", "irrelevant");
+                });
     }
 
     public Player getPlayer(String playerId) {
