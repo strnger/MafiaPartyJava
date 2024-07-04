@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Button, TextField, Typography, Container } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 
 const PlayerPage = () => {
   const [lastWill, setLastWill] = useState('');
   const [role, setRole] = useState({});
   const [hasLife, setHasLife] = useState(false);
   const [isRoleRevealed, setIsRoleRevealed] = useState(false);
+  const [gamePhase, setGamePhase] = useState('');
   const location = useLocation();
   const roomCode = new URLSearchParams(location.search).get('roomCode');
   const playerId = new URLSearchParams(location.search).get('playerId'); // Get playerId from URL
@@ -36,6 +39,28 @@ const PlayerPage = () => {
       .catch(error => {
         console.error('Error fetching player data:', error);
       });
+
+    const socket = new SockJS(`${baseURL}/ws`);
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, () => {
+      console.log('WebSocket connected');
+      stompClient.subscribe(`/topic/gamePhaseUpdate/${roomCode}`, (message) => {
+        const updatedPhase = JSON.parse(message.body).phase;
+        console.log('Received game phase update:', updatedPhase);
+        setGamePhase(updatedPhase);
+      }, (error) => {
+        console.error('Error subscribing to game phase updates:', error);
+      });
+    }, (error) => {
+      console.error('STOMP connection error:', error);
+    });
+
+    return () => {
+      stompClient.disconnect(() => {
+        console.log('WebSocket disconnected');
+      });
+    };
   }, [playerId, baseURL, roomCode, playerName]);
 
   const revealRole = () => {
@@ -61,6 +86,7 @@ const PlayerPage = () => {
   return (
     <Container style={{ padding: '20px' }}>
       <Typography variant="h4">Player: {playerName}</Typography>
+      <Typography variant="h6">Current Phase: {gamePhase}</Typography>
       <Button onClick={revealRole} variant="contained" color="primary" disabled={isRoleRevealed}>
         {isRoleRevealed ? `Role: ${role.title}` : 'Reveal Role'}
       </Button>

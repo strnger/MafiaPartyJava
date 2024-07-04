@@ -33,7 +33,6 @@ public class WebSocketController {
     @MessageMapping("/advancePhase/{roomCode}")
     @SendTo("/topic/gamePhaseUpdate/{roomCode}")
     public String advancePhase(@org.springframework.messaging.handler.annotation.DestinationVariable String roomCode) {
-        gameService.getPhase(roomCode);
-        return gameService.getPhase(roomCode);
+        return gameService.advancePhase(roomCode);
     }
 }

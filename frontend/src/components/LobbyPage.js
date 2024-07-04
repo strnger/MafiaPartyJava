@@ -31,7 +31,7 @@ const LobbyPage = () => {
 
     stompClient.connect({}, () => {
       stompClient.subscribe(`/topic/lobby/${roomCode}`, (message) => {
-        const updatedPlayers = JSON.parse(message.body);
+        const updatedPlayers = JSON.parse(message.body).players;
         setPlayers(updatedPlayers);
       });
     }, (error) => {

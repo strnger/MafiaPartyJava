@@ -18,9 +18,9 @@ public class GameController {
 
     @PostMapping("/advancePhase")
     public ResponseEntity<Game> advancePhase(@RequestParam String roomCode) {
-        gameService.advancePhase(roomCode);
         Game game = gameService.getGame(roomCode);
         if (game != null) {
+            gameService.advancePhase(roomCode);
             return ResponseEntity.ok(game);
         } else {
             return ResponseEntity.notFound().build();

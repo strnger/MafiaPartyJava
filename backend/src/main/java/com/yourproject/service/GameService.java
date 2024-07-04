@@ -29,7 +29,7 @@ public class GameService {
         Game game = games.get(roomCode);
         if (game != null && player != null) {
             game.addPlayer(player);
-            notifyLobby(player.getName());
+            notifyLobby(roomCode);
             return player;
         } else {
             throw new IllegalArgumentException("Invalid room code or player");
@@ -48,6 +48,7 @@ public class GameService {
     public String advancePhase(String roomCode) {
         Game game = games.get(roomCode);
         if (game != null) {
+            messagingTemplate.convertAndSend("/topic/gamePhaseUpdate/" + roomCode, game);
             return game.advancePhase();
         }
         return null;
@@ -94,7 +95,7 @@ public class GameService {
     private void notifyLobby(String roomCode) {
         Game game = games.get(roomCode);
         if (game != null) {
-            messagingTemplate.convertAndSend("/topic/lobby/" + roomCode, game.getPlayers());
+            messagingTemplate.convertAndSend("/topic/lobby/" + roomCode, game);
         }
     }
 }
