@@ -7,22 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/playerAction")
 public class PlayerActionController {
     @Autowired
     private GameService gameService;
 
-    @PostMapping("/{roomCode}/{playerId}")
-    public ResponseEntity<Game> executePlayer(@PathVariable String playerId,
-                                              @PathVariable String roomCode,
-                                              @RequestParam String targetId) {
+    @PostMapping("/{roomCode}/{playerId}/detectiveInvestigatePlayer")
+    public ResponseEntity<String> detectiveInvestigatePlayer(@PathVariable String playerId,
+                                                             @PathVariable String roomCode,
+                                                             @RequestParam String targetId) {
         Game game = gameService.getGame(roomCode);
         if (game != null) {
-            game.executePlayer(playerId);
-            return ResponseEntity.ok(game);
+            Player initiatorPlayer = game.getPlayer(playerId);
+            if(initiatorPlayer.getRole().getTitle().equals("Detective") ){ //sanity check
+                Player targetPlayer = game.getPlayer(targetId);
+                String result = targetPlayer.getRole().getAllegiance().equals("Town") || targetPlayer.getRole().getAllegiance().equals("Neutral") ? "Friend" : "FOE!";
+                return ResponseEntity.ok(result);
+            }
+            return ResponseEntity.ok("You are not a Detective");
         } else {
             return ResponseEntity.notFound().build();
         }

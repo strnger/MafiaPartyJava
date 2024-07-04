@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import DetectiveNightComponent from './DetectiveNightComponent'; // Import the new component
+import DetectiveNightComponent from './DetectiveNightComponent';
 
 const PlayerPage = () => {
   const [lastWill, setLastWill] = useState('');
@@ -14,8 +14,8 @@ const PlayerPage = () => {
   const [gamePhase, setGamePhase] = useState('');
   const location = useLocation();
   const roomCode = new URLSearchParams(location.search).get('roomCode');
-  const playerId = new URLSearchParams(location.search).get('playerId'); // Get playerId from URL
-  const playerName = new URLSearchParams(location.search).get('playerName'); // Get playerName from URL
+  const playerId = new URLSearchParams(location.search).get('playerId');
+  const playerName = new URLSearchParams(location.search).get('playerName');
   const baseURL = window.location.origin.replace(':3000', ':8080');
 
   useEffect(() => {
@@ -110,11 +110,9 @@ const PlayerPage = () => {
       <Button onClick={saveLastWill} variant="contained" color="primary" disabled={!hasLife}>
         Save Last Will
       </Button>
-      {/* Conditionally render components based on role and phase */}
       {role.title === 'Detective' && gamePhase === 'Night' && (
         <DetectiveNightComponent roomCode={roomCode} playerId={playerId} />
       )}
-      {/* Add other conditional components here */}
     </Container>
   );
 };
