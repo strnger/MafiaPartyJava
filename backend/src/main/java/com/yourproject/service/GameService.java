@@ -49,6 +49,11 @@ public class GameService {
         Game game = games.get(roomCode);
         if (game != null) {
             String phase = game.advancePhase();
+            if(phase.equals("Day")){
+                String result = game.getMafiaVoteResult();
+            }
+
+
             messagingTemplate.convertAndSend("/topic/gamePhaseUpdate/" + roomCode, game);
             return phase;
         }

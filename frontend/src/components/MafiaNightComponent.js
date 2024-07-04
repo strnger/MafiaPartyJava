@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Typography, TextField } from '@mui/material';
+import { Button, Typography, TextField, Box } from '@mui/material';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -87,11 +87,11 @@ const MafiaNightComponent = ({ roomCode, playerId, playerName }) => {
   return (
     <div>
       <Typography variant="h6">Mafia Chat:</Typography>
-      <div>
-        {chatHistory.map((message, index) => (
+      <Box sx={{ maxHeight: 200, overflowY: 'auto', border: '1px solid #ccc', padding: 1, borderRadius: 4 }}>
+        {chatHistory.slice(-7).map((message, index) => (
           <Typography key={index} variant="body2">{message}</Typography>
         ))}
-      </div>
+      </Box>
       <TextField
         label="Type a message"
         value={chatMessage}
@@ -109,7 +109,7 @@ const MafiaNightComponent = ({ roomCode, playerId, playerName }) => {
           key={player.id}
           variant="contained"
           onClick={() => handlePlayerClick(player.id, player.name)}
-          disabled={selectedPlayer !== null && selectedPlayer !== player.id}
+          disabled={selectedPlayer === player.id}
         >
           {selectedPlayer === player.id ? `Selected ${player.name}` : player.name}
         </Button>
